@@ -20,7 +20,7 @@ namespace cnl {
     ////////////////////////////////////////////////////////////////////////////////
     // heterogeneous operator overloads
     //
-    // compare two objects of different fixed_point specializations
+    // compare two objects of different scaled_integer specializations
 
     namespace _impl {
         template<typename Operator, typename Rep, int Exponent, int Radix>
@@ -155,7 +155,7 @@ namespace cnl {
         template<> struct is_zero_degree<shift_left_op> : std::false_type {};
         template<> struct is_zero_degree<shift_right_op> : std::false_type {};
 
-        // performs zero-degree binary operations between fixed_point types with the same exponent
+        // performs zero-degree binary operations between scaled_integer types with the same exponent
         template<class Operator, class LhsRep, class RhsRep, int Exponent, int Radix>
         struct binary_operator<Operator, fixed_point<LhsRep, Exponent, Radix>, fixed_point<RhsRep, Exponent, Radix>,
                 enable_if_t<is_zero_degree<Operator>::value>> {
@@ -173,7 +173,7 @@ namespace cnl {
             }
         };
 
-        // performs zero-degree binary operations between fixed_point types with the different exponents
+        // performs zero-degree binary operations between scaled_integer types with the different exponents
         template<typename Operator, typename LhsRep, int LhsExponent, typename RhsRep, int RhsExponent, int Radix>
         struct binary_operator<Operator, fixed_point<LhsRep, LhsExponent, Radix>, fixed_point<RhsRep, RhsExponent, Radix>,
                         enable_if_t<is_zero_degree<Operator>::value>> {
@@ -227,7 +227,7 @@ namespace cnl {
     ////////////////////////////////////////////////////////////////////////////////
     // shift operators
 
-    // fixed_point, dynamic
+    // scaled_integer, dynamic
     template<typename LhsRep, int LhsExponent, int LhsRadix, typename Rhs>
     constexpr auto operator<<(fixed_point<LhsRep, LhsExponent, LhsRadix> const& lhs, Rhs const& rhs)
     -> decltype(_impl::from_rep<fixed_point<decltype(_impl::to_rep(lhs) << int(rhs)), LhsExponent, LhsRadix>>(
@@ -250,7 +250,7 @@ namespace cnl {
                 LhsRadix>>(_impl::to_rep(lhs) >> int(rhs));
     }
 
-    // fixed_point, const_integer
+    // scaled_integer, const_integer
     template<typename LhsRep, int LhsExponent, int LhsRadix, CNL_IMPL_CONSTANT_VALUE_TYPE RhsValue>
     constexpr fixed_point<LhsRep, LhsExponent+static_cast<int>(RhsValue), LhsRadix>
     operator<<(fixed_point<LhsRep, LhsExponent, LhsRadix> const& lhs, constant<RhsValue>)

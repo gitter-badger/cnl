@@ -33,8 +33,8 @@ namespace cnl {
 
 #if defined(__cpp_deduction_guides)
     template<typename Numerator, typename Denominator>
-    fixed_point(fraction<Numerator, Denominator>)
-    -> fixed_point<
+    scaled_integer(fraction<Numerator, Denominator>)
+    -> scaled_integer<
             typename decltype(quotient(std::declval<Numerator>(), std::declval<Denominator>()))::rep,
             decltype(quotient(std::declval<Numerator>(), std::declval<Denominator>()))::exponent>;
 #endif

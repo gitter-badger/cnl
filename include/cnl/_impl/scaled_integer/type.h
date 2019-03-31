@@ -47,7 +47,7 @@ namespace cnl {
         static_assert(Radix>=2, "Radix must be two or greater");
 
         static_assert(!_impl::is_fixed_point<Rep>::value,
-                "fixed_point of fixed_point is not a supported");
+                "scaled_integer of scaled_integer is not a supported");
 
         using _base = _impl::number_base<fixed_point<Rep, Exponent, Radix>, Rep>;
     public:
@@ -181,23 +181,23 @@ namespace cnl {
     constexpr int fixed_point<Rep, Exponent, Radix>::exponent;
 
     ////////////////////////////////////////////////////////////////////////////////
-    // cnl::fixed_point::fixed_point deduction guides
+    // cnl::scaled_integer::scaled_integer deduction guides
 
 #if defined(__cpp_deduction_guides)
     // same as cnl::make_fixed_point
     template<CNL_IMPL_CONSTANT_VALUE_TYPE Value>
-    fixed_point(::cnl::constant<Value>)
-    -> fixed_point<
+    scaled_integer(::cnl::constant<Value>)
+    -> scaled_integer<
             set_digits_t<int, _impl::max(digits_v<int>, _impl::used_digits(Value)-trailing_bits(Value))>,
             trailing_bits(Value)>;
 
     template<class Integer>
-    fixed_point(Integer)
-    -> fixed_point<Integer, 0>;
+    scaled_integer(Integer)
+    -> scaled_integer<Integer, 0>;
 #endif
 
     ////////////////////////////////////////////////////////////////////////////////
-    // cnl::fixed_point<> member definitions
+    // cnl::scaled_integer<> member definitions
 
     template<typename Rep, int Exponent, int Radix>
     template<class S>

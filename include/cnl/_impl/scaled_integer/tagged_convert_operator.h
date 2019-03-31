@@ -17,7 +17,7 @@
 /// compositional numeric library
 namespace cnl {
     namespace _impl {
-        // conversion between two fixed_point types where rounding *isn't* an issue
+        // conversion between two scaled_integer types where rounding *isn't* an issue
         template<
                 typename ResultRep, int ResultExponent,
                 typename InputRep, int InputExponent,
@@ -33,7 +33,7 @@ namespace cnl {
                         fixed_point<InputRep, InputExponent, Radix>> {
         };
 
-        // conversion between two fixed_point types where rounding *is* an issue
+        // conversion between two scaled_integer types where rounding *is* an issue
         template<
                 typename ResultRep, int ResultExponent,
                 typename InputRep, int InputExponent,
@@ -60,7 +60,7 @@ namespace cnl {
             }
         };
 
-        // conversion from float to fixed_point
+        // conversion from float to scaled_integer
         template<
                 typename ResultRep, int ResultExponent, int ResultRadix,
                 typename Input>

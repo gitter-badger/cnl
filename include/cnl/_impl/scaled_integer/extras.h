@@ -119,7 +119,7 @@ namespace cnl {
     -> decltype(_impl::from_rep<fixed_point<Rep, 0, Radix>>(_impl::to_rep(x)>>constant<-Exponent>())) {
         static_assert(
                 Radix==2,
-                "cnl::floor(fixed_point<Rep, Exponent, Radix>) not implemented for Exponent<0 && Radix!=2");
+                "cnl::floor(scaled_integer<Rep, Exponent, Radix>) not implemented for Exponent<0 && Radix!=2");
 
         return _impl::from_rep<fixed_point<Rep, 0, Radix>>(_impl::to_rep(x)>>constant<-Exponent>());
     }
@@ -131,7 +131,7 @@ namespace cnl {
     }
 
     ////////////////////////////////////////////////////////////////////////////////
-    // fixed_point trig functions
+    // scaled_integer trig functions
     //
     // Placeholder implementations fall back on <cmath> functions which is slow
     // due to conversion to and from floating-point types; also inconvenient as
@@ -198,7 +198,7 @@ namespace cnl {
     }
 
     ////////////////////////////////////////////////////////////////////////////////
-    // cnl::fixed_point streaming - (placeholder implementation)
+    // cnl::scaled_integer streaming - (placeholder implementation)
 
     template<typename Rep, int Exponent, int Radix>
     ::std::ostream& operator<<(::std::ostream& out, fixed_point<Rep, Exponent, Radix> const& fp)
@@ -218,7 +218,7 @@ namespace cnl {
 
 namespace cnl {
     ////////////////////////////////////////////////////////////////////////////////
-    // std::numeric_limits for cnl::fixed_point
+    // std::numeric_limits for cnl::scaled_integer
 
     // note: some members are guessed,
     // some are temporary (assuming rounding style, traps etc.)

@@ -15,7 +15,7 @@
 /// compositional numeric library
 namespace cnl {
     ////////////////////////////////////////////////////////////////////////////////
-    // fixed_point specializations of <num_traits.h> templates
+    // scaled_integer specializations of <num_traits.h> templates
 
     template<typename Rep, int Exponent, int Radix>
     struct digits<fixed_point<Rep, Exponent, Radix>> : digits<Rep> {
@@ -27,7 +27,7 @@ namespace cnl {
     };
 
     ////////////////////////////////////////////////////////////////////////////////
-    // cnl::from_value<cnl::fixed_point<>>
+    // cnl::from_value<cnl::scaled_integer<>>
 
     template<typename Rep, int Exponent, int Radix, typename Value>
     struct from_value<fixed_point<Rep, Exponent, Radix>, Value>
@@ -58,7 +58,7 @@ namespace cnl {
     };
 
     ////////////////////////////////////////////////////////////////////////////////
-    // fixed_point specializations of fixed_point-specific templates
+    // scaled_integer specializations of scaled_integer-specific templates
 
     namespace _impl {
 

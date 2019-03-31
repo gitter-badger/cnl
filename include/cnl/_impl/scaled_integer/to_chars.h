@@ -85,7 +85,7 @@ namespace cnl {
         -> enable_if_t<integer_digits<fixed_point<Rep, Exponent, Radix>>::value>=4, char*>
         {
             do {
-                // to_chars only supports fixed_point types that can represent all decimal units.
+                // to_chars only supports scaled_integer types that can represent all decimal units.
                 using fixed_point = fixed_point<Rep, Exponent, Radix>;
                 CNL_ASSERT(value<=numeric_limits<fixed_point>::max()/Rep{10});
 
@@ -216,7 +216,7 @@ namespace cnl {
         }
     }
 
-    // partial implementation of std::to_chars overloaded on cnl::fixed_point
+    // partial implementation of std::to_chars overloaded on cnl::scaled_integer
     template<typename Rep, int Exponent, int Radix>
     to_chars_result to_chars(
             char* const first,

@@ -42,13 +42,13 @@ namespace design_decisions {
 
     namespace deduction {
         using cnl::constant;
-        using cnl::fixed_point;
+        using cnl::scaled_integer;
 
-        auto a = fixed_point(0ul);
-        static_assert(is_same_v<decltype(a), fixed_point<unsigned long, 0>>);
+        auto a = scaled_integer(0ul);
+        static_assert(is_same_v<decltype(a), scaled_integer<unsigned long, 0>>);
 
-        constexpr auto b = fixed_point(constant<0xFF00000000L>{});
-        static_assert(is_same_v<decltype(b), const fixed_point<int, 32>>);
+        constexpr auto b = scaled_integer(constant<0xFF00000000L>{});
+        static_assert(is_same_v<decltype(b), const scaled_integer<int, 32>>);
         static_assert(to_rep(b) == 0xFF);
     }
 
@@ -95,17 +95,16 @@ namespace design_decisions {
     }
 
     namespace division {
-        using cnl::fixed_point;
         using cnl::fraction;
         using std::int64_t;
 
-        constexpr auto i = fixed_point{fraction{1, 3}};
+        constexpr auto i = cnl::scaled_integer{fraction{1, 3}};
         static_assert(i == 0.333333333022892475128173828125L);
-        static_assert(is_same_v<decltype(i), const fixed_point<int64_t, -31>>);
+        static_assert(is_same_v<decltype(i), const cnl::scaled_integer<int64_t, -31>>);
 
-        constexpr auto j = fixed_point<int, -16>{fraction{1, 3}};
+        constexpr auto j = cnl::scaled_integer<int, -16>{fraction{1, 3}};
         static_assert(j == 0.3333282470703125);
-        static_assert(is_same_v<decltype(j), const fixed_point<int, -16>>);
+        static_assert(is_same_v<decltype(j), const cnl::scaled_integer<int, -16>>);
     }
 }
 

@@ -6,7 +6,7 @@
 
 //No include guards: we mean to include this for each case separately
 
-#include <cnl/_impl/fixed_point/math.h>
+#include <cnl/_impl/scaled_integer/math.h>
 
 #include <algorithm>
 #include <array>

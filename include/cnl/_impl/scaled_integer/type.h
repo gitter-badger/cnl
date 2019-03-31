@@ -16,7 +16,7 @@
 #include "../../constant.h"
 #include "../../numeric.h"
 #include "declaration.h"
-#include "is_fixed_point.h"
+#include "is_scaled_integer.h"
 
 /// compositional numeric library
 namespace cnl {
@@ -46,7 +46,7 @@ namespace cnl {
             : public _impl::number_base<scaled_integer<Rep, Exponent, Radix>, Rep> {
         static_assert(Radix>=2, "Radix must be two or greater");
 
-        static_assert(!_impl::is_fixed_point<Rep>::value,
+        static_assert(!_impl::is_scaled_integer<Rep>::value,
                 "scaled_integer of scaled_integer is not a supported");
 
         using _base = _impl::number_base<scaled_integer<Rep, Exponent, Radix>, Rep>;
@@ -184,7 +184,7 @@ namespace cnl {
     // cnl::scaled_integer::scaled_integer deduction guides
 
 #if defined(__cpp_deduction_guides)
-    // same as cnl::make_fixed_point
+    // same as cnl::make_scaled_integer
     template<CNL_IMPL_CONSTANT_VALUE_TYPE Value>
     scaled_integer(::cnl::constant<Value>)
     -> scaled_integer<

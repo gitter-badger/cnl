@@ -345,15 +345,15 @@ namespace test_impl_make_number {
 
 #if defined(__cpp_deduction_guides)
 namespace test_deduction_guides {
-    static_assert(identical(cnl::make_fixed_point(short{123}), cnl::fixed_point(short{123})),
-            "cnl::fixed_point class template deduction");
-    static_assert(identical(cnl::make_fixed_point(UINT64_C(404)), cnl::fixed_point(UINT64_C(404))),
-            "cnl::fixed_point class template deduction");
+    static_assert(identical(cnl::make_scaled_integer(short{123}), cnl::scaled_integer(short{123})),
+            "cnl::scaled_integer class template deduction");
+    static_assert(identical(cnl::make_scaled_integer(UINT64_C(404)), cnl::scaled_integer(UINT64_C(404))),
+            "cnl::scaled_integer class template deduction");
 
-    static_assert(identical(cnl::make_fixed_point(cnl::constant<369>{}), cnl::fixed_point(cnl::constant<369>{})),
-            "cnl::fixed_point class template deduction");
-    static_assert(identical(cnl::make_fixed_point(cnl::constant<4>{}), cnl::fixed_point(cnl::constant<4>{})),
-            "cnl::fixed_point class template deduction");
+    static_assert(identical(cnl::make_scaled_integer(cnl::constant<369>{}), cnl::scaled_integer(cnl::constant<369>{})),
+            "cnl::scaled_integer class template deduction");
+    static_assert(identical(cnl::make_scaled_integer(cnl::constant<4>{}), cnl::scaled_integer(cnl::constant<4>{})),
+            "cnl::scaled_integer class template deduction");
 }
 #else
 namespace test_make_fixed_point {
@@ -1151,10 +1151,10 @@ struct FixedPointRepTester {
 
     // test deduction guides
 #if defined(__cpp_deduction_guides)
-    static_assert(identical(cnl::fixed_point{Rep{0}}, cnl::fixed_point<Rep, 0>{0}));
-    static_assert(identical(cnl::fixed_point(Rep{0}), cnl::fixed_point<Rep, 0>(0)));
+    static_assert(identical(cnl::scaled_integer{Rep{0}}, cnl::scaled_integer<Rep, 0>{0}));
+    static_assert(identical(cnl::scaled_integer(Rep{0}), cnl::scaled_integer<Rep, 0>(0)));
 
-    static_assert(identical(cnl::make_fixed_point(Rep{0}), cnl::fixed_point(Rep{0})));
+    static_assert(identical(cnl::make_scaled_integer(Rep{0}), cnl::scaled_integer(Rep{0})));
 #endif
 };
 

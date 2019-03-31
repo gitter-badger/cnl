@@ -86,10 +86,10 @@ namespace cnl {
         {
             do {
                 // to_chars only supports scaled_integer types that can represent all decimal units.
-                using fixed_point = fixed_point<Rep, Exponent, Radix>;
-                CNL_ASSERT(value<=numeric_limits<fixed_point>::max()/Rep{10});
+                using scaled_integer = scaled_integer<Rep, Exponent, Radix>;
+                CNL_ASSERT(value<=numeric_limits<scaled_integer>::max()/Rep{10});
 
-                value = from_rep<fixed_point>(
+                value = from_rep<scaled_integer>(
                         cnl::fixed_width_scale<1, 10, Rep>{}(to_rep(value)));
 
                 auto const split = _impl::split<Rep, Exponent, Radix>{}(value);
@@ -125,7 +125,7 @@ namespace cnl {
             // Initially, the sequence is { 5, 0, 0, 0, ... }.
             bit[0] = 5;
 
-            for (auto mask = fixed_point<Rep, Exponent, Radix>{ .5 };;) {
+            for (auto mask = scaled_integer<Rep, Exponent, Radix>{ .5 };;) {
                 // At this point, bit is bytewise decimal representation of bitwise mask.
 
                 // If this bit is present,

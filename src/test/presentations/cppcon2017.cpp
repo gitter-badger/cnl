@@ -75,7 +75,7 @@ namespace e {
     static_assert(fixed_point<unsigned>{1u} < fixed_point<signed>{-1}, "OK(!)");
 
 #if defined(__cpp_deduction_guides)
-    static_assert(fixed_point{1u} < fixed_point{-1});
+    static_assert(cnl::scaled_integer{1u} < cnl::scaled_integer{-1});
 #endif
 }
 
@@ -169,25 +169,25 @@ namespace n {
 
 using namespace cnl::literals;
 namespace o {
-    constexpr auto x = fixed_point{42ul}; // fixed_point<unsigned long, 0>{42}
-    static_assert(cnl::_impl::identical(fixed_point<unsigned long, 0>{42}, x));
+    constexpr auto x = cnl::scaled_integer{42ul}; // cnl::scaled_integer<unsigned long, 0>{42}
+    static_assert(cnl::_impl::identical(cnl::scaled_integer<unsigned long, 0>{42}, x));
 
-    constexpr auto z = fixed_point{128_c};
-    static_assert(cnl::_impl::identical(fixed_point<int, 7>{128}, z));
+    constexpr auto z = cnl::scaled_integer{128_c};
+    static_assert(cnl::_impl::identical(cnl::scaled_integer<int, 7>{128}, z));
 
-    constexpr auto a = fixed_point{0b10000000000000000000000000000000000000000_c};
-    static_assert(cnl::_impl::identical(fixed_point<int, 40>{0b10000000000000000000000000000000000000000l}, a));
+    constexpr auto a = cnl::scaled_integer{0b10000000000000000000000000000000000000000_c};
+    static_assert(cnl::_impl::identical(cnl::scaled_integer<int, 40>{0b10000000000000000000000000000000000000000l}, a));
 
-    constexpr auto b = fixed_point{0b11111111111111111111111111111111111111111_c};
-    static_assert(cnl::_impl::identical(fixed_point<long, 0>{0b11111111111111111111111111111111111111111l}, b));
+    constexpr auto b = cnl::scaled_integer{0b11111111111111111111111111111111111111111_c};
+    static_assert(cnl::_impl::identical(cnl::scaled_integer<long, 0>{0b11111111111111111111111111111111111111111l}, b));
 
     constexpr auto c = elastic_integer{2017_c};
     static_assert(cnl::_impl::identical(elastic_integer<11>{2017}, c));
 
     constexpr auto e = 0x7f000_elastic;
-    static_assert(cnl::_impl::identical(fixed_point<elastic_integer<7>, 12>{0x7f000}, e));
+    static_assert(cnl::_impl::identical(cnl::scaled_integer<elastic_integer<7>, 12>{0x7f000}, e));
 
     constexpr auto s = e >> 1_c;
-    static_assert(cnl::_impl::identical(fixed_point<elastic_integer<7>, 11>{0x3f800}, s));
+    static_assert(cnl::_impl::identical(cnl::scaled_integer<elastic_integer<7>, 11>{0x3f800}, s));
 }
 #endif

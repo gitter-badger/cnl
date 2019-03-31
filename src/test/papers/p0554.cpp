@@ -39,11 +39,11 @@ namespace {
 #if defined(__cpp_deduction_guides)
     namespace division2 {
         using cnl::elastic_number;
-        using cnl::fixed_point;
+        using cnl::scaled_integer;
         using cnl::fraction;
         constexpr elastic_number<7, -6> numerator = 1.125; // 1:6
         constexpr elastic_number<5, -3> denominator = 4.;  // 2:3
-        constexpr auto quotient = fixed_point{fraction{numerator, denominator}};
+        constexpr auto quotient = scaled_integer{fraction{numerator, denominator}};
         static_assert(identical(quotient, elastic_number<12, -8>{0.28125}), "position_paper test failed");
     }
 #endif

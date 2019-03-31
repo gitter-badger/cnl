@@ -102,7 +102,7 @@ namespace test_fraction_deduced {
     static_assert(identical(cnl::elastic_number<3, -2>{0.25}, named), "");
 
 #if defined(__cpp_deduction_guides)
-    constexpr auto deduced = fixed_point{third};
+    constexpr auto deduced = cnl::scaled_integer{third};
     static_assert(identical(named, deduced));
 #endif
 }

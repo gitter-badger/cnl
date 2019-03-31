@@ -18,7 +18,7 @@
 namespace cnl {
 
     ////////////////////////////////////////////////////////////////////////////////
-    // cnl::make_fixed_point<Value>
+    // cnl::make_scaled_integer<Value>
 
     /// \brief makes a fixed_point object from a given value
     ///
@@ -30,7 +30,7 @@ namespace cnl {
     /// \note This function is deprecated after C++17
     /// in favor of class template deduction.
     template<typename Value>
-    constexpr auto make_fixed_point(Value const& value)
+    constexpr auto make_scaled_integer(Value const& value)
     -> cnl::from_value_t<scaled_integer<Value, 0>, Value>
     {
         return _impl::from_number<scaled_integer<Value, 0>>(value);

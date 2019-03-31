@@ -63,7 +63,7 @@ namespace {
         static_assert(identical(cnl::quotient(n, d), nq), "cnl::make_fixed_point(cnl::fraction)");
 #if defined(__cpp_deduction_guides)
         static_assert(
-                identical(nq, cnl::fixed_point{f}),
+                identical(nq, cnl::scaled_integer{f}),
                 "cnl::fixed_point::fixed_point(fraction) w. CTAD");
 #endif
 
@@ -81,7 +81,7 @@ namespace {
         static_assert(identical(fixed_point<quot_digits_t<>, -31>{0.333333333022892475128173828125L}, named), "");
 
 #if defined(__cpp_deduction_guides)
-        constexpr auto deduced = cnl::fixed_point{third};
+        constexpr auto deduced = cnl::scaled_integer{third};
         static_assert(identical(named, deduced));
 #endif
     }
@@ -93,7 +93,7 @@ namespace {
         static_assert(identical(cnl::fixed_point<quot_digits_t<>, -31>{0.333333333022892475128173828125L}, named), "");
 
 #if defined(__cpp_deduction_guides)
-        constexpr auto deduced = cnl::fixed_point{third};
+        constexpr auto deduced = cnl::scaled_integer{third};
         static_assert(identical(named, deduced));
 #endif
 
@@ -108,7 +108,7 @@ namespace {
         static_assert(identical(cnl::fixed_point<quot_digits_t<int8>, -7>{0.328125}, named), "");
 
 #if defined(__cpp_deduction_guides)
-        constexpr auto deduced = cnl::fixed_point{third};
+        constexpr auto deduced = cnl::scaled_integer{third};
         static_assert(identical(named, deduced));
 #endif
 
@@ -123,7 +123,7 @@ namespace {
         static_assert(identical(cnl::fixed_point<quot_digits_t<int16>, -15>{0.33331298828125}, named), "");
 
 #if defined(__cpp_deduction_guides)
-        constexpr auto deduced = cnl::fixed_point{third};
+        constexpr auto deduced = cnl::scaled_integer{third};
         static_assert(identical(named, deduced));
 #endif
 

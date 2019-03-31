@@ -23,7 +23,7 @@ namespace cnl {
 
     template<typename Rep, int Exponent, int Radix, int MinNumBits>
     struct set_digits<fixed_point<Rep, Exponent, Radix>, MinNumBits> {
-        using type = fixed_point<set_digits_t<Rep, MinNumBits>, Exponent, Radix>;
+        using type = scaled_integer<set_digits_t<Rep, MinNumBits>, Exponent, Radix>;
     };
 
     ////////////////////////////////////////////////////////////////////////////////

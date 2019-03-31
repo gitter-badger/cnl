@@ -18,17 +18,17 @@
 namespace cnl {
     template<typename Rep, int Exponent, int Radix>
     template<typename Numerator, typename Denominator>
-    constexpr fixed_point<Rep, Exponent, Radix>::fixed_point(fraction<Numerator, Denominator> const& f)
-            : fixed_point(quotient<fixed_point>(f.numerator, f.denominator))
+    constexpr scaled_integer<Rep, Exponent, Radix>::scaled_integer(fraction<Numerator, Denominator> const& f)
+            : scaled_integer(quotient<scaled_integer>(f.numerator, f.denominator))
     {
     }
 
     template<typename Rep, int Exponent, int Radix>
     template<typename Numerator, typename Denominator>
-    CNL_RELAXED_CONSTEXPR fixed_point<Rep, Exponent, Radix>&
-    fixed_point<Rep, Exponent, Radix>::operator=(fraction<Numerator, Denominator> const& f)
+    CNL_RELAXED_CONSTEXPR scaled_integer<Rep, Exponent, Radix>&
+    scaled_integer<Rep, Exponent, Radix>::operator=(fraction<Numerator, Denominator> const& f)
     {
-        return operator=(quotient<fixed_point>(f.numerator, f.denominator));
+        return operator=(quotient<scaled_integer>(f.numerator, f.denominator));
     }
 
 #if defined(__cpp_deduction_guides)

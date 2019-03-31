@@ -28,7 +28,7 @@ namespace cnl {
             constexpr auto operator()(fixed_point<Rep, Exponent, Radix> const& rhs) const
             -> decltype(from_rep<fixed_point<decltype(Operator()(_impl::to_rep(rhs))), Exponent, Radix>>(Operator()(_impl::to_rep(rhs))))
             {
-                return from_rep<fixed_point<decltype(Operator()(_impl::to_rep(rhs))), Exponent, Radix>>(Operator()(_impl::to_rep(rhs)));
+                return from_rep<scaled_integer<decltype(Operator()(_impl::to_rep(rhs))), Exponent, Radix>>(Operator()(_impl::to_rep(rhs)));
             }
         };
 
@@ -53,8 +53,8 @@ namespace cnl {
                 fixed_point<RhsRep, RhsExponent, Radix>,
                 enable_if_t<(LhsExponent<RhsExponent)>> {
             static constexpr int shiftage = RhsExponent - LhsExponent;
-            using lhs_type = fixed_point<LhsRep, LhsExponent, Radix>;
-            using rhs_type = fixed_point<decltype(std::declval<RhsRep>()<<constant<shiftage>()), LhsExponent, Radix>;
+            using lhs_type = scaled_integer<LhsRep, LhsExponent, Radix>;
+            using rhs_type = scaled_integer<decltype(std::declval<RhsRep>()<<constant<shiftage>()), LhsExponent, Radix>;
             using operator_type = comparison_operator<Operator, lhs_type, rhs_type>;
 
             constexpr auto operator()(
@@ -72,8 +72,8 @@ namespace cnl {
                 fixed_point<RhsRep, RhsExponent, Radix>,
                 enable_if_t<(RhsExponent<LhsExponent)>> {
             static constexpr int shiftage = LhsExponent - RhsExponent;
-            using lhs_type = fixed_point<decltype(std::declval<LhsRep>()<<constant<shiftage>()), RhsExponent, Radix>;
-            using rhs_type = fixed_point<RhsRep, RhsExponent, Radix>;
+            using lhs_type = scaled_integer<decltype(std::declval<LhsRep>()<<constant<shiftage>()), RhsExponent, Radix>;
+            using rhs_type = scaled_integer<RhsRep, RhsExponent, Radix>;
             using operator_type = comparison_operator<Operator, lhs_type, rhs_type>;
 
             constexpr auto operator()(
@@ -203,7 +203,7 @@ namespace cnl {
 
         template<typename Operator, typename Rep, int Exponent, int Radix>
         struct pre_operator<Operator, fixed_point<Rep, Exponent, Radix>> {
-            constexpr auto operator()(fixed_point<Rep, Exponent, Radix>& rhs) const
+            constexpr auto operator()(scaled_integer<Rep, Exponent, Radix>& rhs) const
             -> decltype(typename pre_to_assign<Operator>::type{}(rhs, 1))
             {
                 return typename pre_to_assign<Operator>::type{}(rhs, 1);
@@ -215,7 +215,7 @@ namespace cnl {
 
         template<typename Operator, typename Rep, int Exponent, int Radix>
         struct post_operator<Operator, fixed_point<Rep, Exponent, Radix>> {
-            CNL_RELAXED_CONSTEXPR fixed_point<Rep, Exponent, Radix> operator()(fixed_point<Rep, Exponent, Radix>& rhs) const
+            CNL_RELAXED_CONSTEXPR scaled_integer<Rep, Exponent, Radix> operator()(scaled_integer<Rep, Exponent, Radix>& rhs) const
             {
                 auto copy = rhs;
                 typename post_to_assign<Operator>::type{}(rhs, 1);

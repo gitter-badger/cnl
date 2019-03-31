@@ -24,13 +24,13 @@ namespace cnl {
                 int Radix>
         struct tagged_convert_operator<
                 _impl::nearest_rounding_tag,
-                fixed_point<ResultRep, ResultExponent, Radix>,
-                fixed_point<InputRep, InputExponent, Radix>,
+                scaled_integer<ResultRep, ResultExponent, Radix>,
+                scaled_integer<InputRep, InputExponent, Radix>,
                 _impl::enable_if_t<(ResultExponent <= InputExponent)>>
                 : tagged_convert_operator<
                         _impl::native_rounding_tag,
-                        fixed_point<ResultRep, ResultExponent, Radix>,
-                        fixed_point<InputRep, InputExponent, Radix>> {
+                        scaled_integer<ResultRep, ResultExponent, Radix>,
+                        scaled_integer<InputRep, InputExponent, Radix>> {
         };
 
         // conversion between two scaled_integer types where rounding *is* an issue
@@ -40,12 +40,12 @@ namespace cnl {
                 int Radix>
         struct tagged_convert_operator<
                 _impl::nearest_rounding_tag,
-                fixed_point<ResultRep, ResultExponent, Radix>,
-                fixed_point<InputRep, InputExponent, Radix>,
+                scaled_integer<ResultRep, ResultExponent, Radix>,
+                scaled_integer<InputRep, InputExponent, Radix>,
                 _impl::enable_if_t<!(ResultExponent<=InputExponent)>> {
         private:
-            using _result = fixed_point<ResultRep, ResultExponent, Radix>;
-            using _input = fixed_point<InputRep, InputExponent, Radix>;
+            using _result = scaled_integer<ResultRep, ResultExponent, Radix>;
+            using _input = scaled_integer<InputRep, InputExponent, Radix>;
 
             static constexpr _input half()
             {
@@ -66,11 +66,11 @@ namespace cnl {
                 typename Input>
         struct tagged_convert_operator<
                 _impl::nearest_rounding_tag,
-                fixed_point<ResultRep, ResultExponent, ResultRadix>,
+                scaled_integer<ResultRep, ResultExponent, ResultRadix>,
                 Input,
                 _impl::enable_if_t<std::is_floating_point<Input>::value>> {
         private:
-            using _result = fixed_point<ResultRep, ResultExponent, ResultRadix>;
+            using _result = scaled_integer<ResultRep, ResultExponent, ResultRadix>;
 
             static constexpr Input half()
             {
@@ -90,13 +90,13 @@ namespace cnl {
                 typename Input>
         struct tagged_convert_operator<
                 _impl::nearest_rounding_tag,
-                fixed_point<ResultRep, ResultExponent, ResultRadix>,
+                scaled_integer<ResultRep, ResultExponent, ResultRadix>,
                 Input,
                 _impl::enable_if_t<cnl::numeric_limits<Input>::is_integer>>
                 : tagged_convert_operator<
                         _impl::nearest_rounding_tag,
-                        fixed_point<ResultRep, ResultExponent, ResultRadix>,
-                        fixed_point<Input>> {
+                        scaled_integer<ResultRep, ResultExponent, ResultRadix>,
+                        scaled_integer<Input>> {
         };
 
         template<
@@ -105,14 +105,14 @@ namespace cnl {
         struct tagged_convert_operator<
                 _impl::nearest_rounding_tag,
                 Result,
-                fixed_point<InputRep, InputExponent, InputRadix>,
+                scaled_integer<InputRep, InputExponent, InputRadix>,
                 _impl::enable_if_t<cnl::numeric_limits<Result>::is_integer>> {
-            using _input = fixed_point<InputRep, InputExponent, InputRadix>;
+            using _input = scaled_integer<InputRep, InputExponent, InputRadix>;
 
             constexpr Result operator()(_input const& from) const
             {
                 return _impl::to_rep(
-                        _impl::tagged_convert_operator<_impl::nearest_rounding_tag, fixed_point<Result>, _input>{}(
+                        _impl::tagged_convert_operator<_impl::nearest_rounding_tag, scaled_integer<Result>, _input>{}(
                                 from));
             }
         };

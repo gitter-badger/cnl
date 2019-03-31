@@ -31,9 +31,9 @@ namespace cnl {
     /// in favor of class template deduction.
     template<typename Value>
     constexpr auto make_fixed_point(Value const& value)
-    -> cnl::from_value_t<fixed_point<Value, 0>, Value>
+    -> cnl::from_value_t<scaled_integer<Value, 0>, Value>
     {
-        return _impl::from_number<fixed_point<Value, 0>>(value);
+        return _impl::from_number<scaled_integer<Value, 0>>(value);
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -46,7 +46,7 @@ namespace cnl {
         };
 
         template<typename Rep, int Exponent, int Radix>
-        struct fixed_point_rep<fixed_point<Rep, Exponent, Radix>> : fixed_point_rep<Rep> {
+        struct fixed_point_rep<scaled_integer<Rep, Exponent, Radix>> : fixed_point_rep<Rep> {
         };
 
         template<typename Number>
@@ -56,7 +56,7 @@ namespace cnl {
         }
 
         template<typename Rep, int Exponent, int Radix>
-        constexpr Rep not_fixed_point(fixed_point<Rep, Exponent, Radix> const& f)
+        constexpr Rep not_fixed_point(scaled_integer<Rep, Exponent, Radix> const& f)
         {
             return _impl::to_rep(f);
         }
@@ -65,7 +65,7 @@ namespace cnl {
         struct exponent : constant<0> {};
 
         template<typename Rep, int Exponent, int Radix>
-        struct exponent<fixed_point<Rep, Exponent, Radix>> : constant<Exponent> {
+        struct exponent<scaled_integer<Rep, Exponent, Radix>> : constant<Exponent> {
         };
 
         template<class Quotient, class Dividend, class Divisor>
@@ -82,8 +82,8 @@ namespace cnl {
         struct result;
 
         template<typename Rep, int Exponent, int Radix, typename Dividend, typename Divisor>
-        struct result<fixed_point<Rep, Exponent, Radix>, Dividend, Divisor> {
-            using type = fixed_point<Rep, Exponent, Radix>;
+        struct result<scaled_integer<Rep, Exponent, Radix>, Dividend, Divisor> {
+            using type = scaled_integer<Rep, Exponent, Radix>;
         };
 
         template<class Dividend, class Divisor>
@@ -102,7 +102,7 @@ namespace cnl {
             using rep_type = set_digits_t<natural_result, result_digits>;
             static constexpr int rep_exponent = -fractional_digits;
 
-            using type = fixed_point<typename fixed_point_rep<rep_type>::type, rep_exponent>;
+            using type = scaled_integer<typename fixed_point_rep<rep_type>::type, rep_exponent>;
         };
     }
 

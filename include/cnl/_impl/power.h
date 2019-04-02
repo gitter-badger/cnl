@@ -39,7 +39,7 @@ namespace cnl {
             {
                 // This check is intended to catch situations where a number is generated
                 // which cannot possibly fit in the given type, S.
-                // This may be caused by a conversion to or from a fixed_point type
+                // This may be caused by a conversion to or from a scaled_integer type
                 // which cannot possible store a non-zero value.
                 using result_numeric_limits = numeric_limits<decltype(S{1} << constant<Exponent>{})>;
                 static_assert(!std::is_integral<S>::value

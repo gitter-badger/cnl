@@ -5,7 +5,7 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 /// \file
-/// \brief fixed_point specializations of math constants from <cnl/numeric.h>
+/// \brief scaled_integer specializations of math constants from <cnl/numeric.h>
 
 #ifndef FIXED_POINT_CONSTANTS_H_
 #define FIXED_POINT_CONSTANTS_H_

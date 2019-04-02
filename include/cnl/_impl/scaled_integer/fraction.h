@@ -5,7 +5,7 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 /// \file
-/// \brief essential `fraction` definitions related to the `fixed_point` type
+/// \brief essential `fraction` definitions related to the `scaled_integer` type
 
 #if !defined(CNL_IMPL_FIXED_POINT_FRACTION_H)
 #define CNL_IMPL_FIXED_POINT_FRACTION_H 1

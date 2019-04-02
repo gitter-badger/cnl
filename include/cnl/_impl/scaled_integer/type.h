@@ -5,7 +5,7 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 /// \file
-/// \brief definition of `cnl::fixed_point` type
+/// \brief definition of `cnl::scaled_integer` type
 
 #if !defined(CNL_FIXED_POINT_DEF_H)
 #define CNL_FIXED_POINT_DEF_H 1
@@ -24,7 +24,7 @@ namespace cnl {
     struct fraction;
 
     /// \brief literal real number approximation that uses fixed-point arithmetic
-    /// \headerfile cnl/fixed_point.h
+    /// \headerfile cnl/scaled_integer.h
     ///
     /// \tparam Rep the underlying type used to represent the value; defaults to `int`
     /// \tparam Exponent the exponent used to scale the integer value; defaults to `0`
@@ -39,7 +39,7 @@ namespace cnl {
     /// \par Examples
     ///
     /// To define a fixed-point value 1 byte in size with a sign bit, 4 integer bits and 3 fractional bits:
-    /// \snippet snippets.cpp define a fixed_point value
+    /// \snippet snippets.cpp define a scaled_integer value
 
     template<typename Rep, int Exponent, int Radix>
     class scaled_integer
@@ -126,7 +126,7 @@ namespace cnl {
         template<class FromRep, int FromExponent>
         CNL_RELAXED_CONSTEXPR scaled_integer& operator=(scaled_integer<FromRep, FromExponent, Radix> const& rhs)
         {
-            _base::operator=(fixed_point_to_rep(rhs));
+            _base::operator=(scaled_integer_to_rep(rhs));
             return *this;
         }
 
@@ -173,7 +173,7 @@ namespace cnl {
         static constexpr S rep_to_floating_point(rep r);
 
         template<class FromRep, int FromExponent>
-        static constexpr rep fixed_point_to_rep(scaled_integer<FromRep, FromExponent, Radix> const& rhs);
+        static constexpr rep scaled_integer_to_rep(scaled_integer<FromRep, FromExponent, Radix> const& rhs);
     };
 
     /// value of template parameter, \a Exponent
@@ -235,7 +235,7 @@ namespace cnl {
     template<typename Rep, int Exponent, int Radix>
     template<class FromRep, int FromExponent>
     constexpr typename scaled_integer<Rep, Exponent, Radix>::rep
-    scaled_integer<Rep, Exponent, Radix>::fixed_point_to_rep(scaled_integer<FromRep, FromExponent, Radix> const& rhs)
+    scaled_integer<Rep, Exponent, Radix>::scaled_integer_to_rep(scaled_integer<FromRep, FromExponent, Radix> const& rhs)
     {
         return _impl::scale<FromExponent-exponent>(_impl::to_rep(rhs));
     }

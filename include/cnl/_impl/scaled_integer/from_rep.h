@@ -12,14 +12,14 @@
 
 /// compositional numeric library
 namespace cnl {
-    /// \brief \ref fixed_point specialization of \ref from_rep
-    /// \headerfile cnl/fixed_point.h
+    /// \brief \ref scaled_integer specialization of \ref from_rep
+    /// \headerfile cnl/scaled_integer.h
     ///
-    /// \tparam Exponent the \c Exponent parameter of the generated \ref fixed_point type
+    /// \tparam Exponent the \c Exponent parameter of the generated \ref scaled_integer type
     /// \tparam ArchetypeRep ignored; replaced by \c Rep
     template<typename ArchetypeRep, int Exponent, int Radix, typename Rep>
     struct from_rep<scaled_integer<ArchetypeRep, Exponent, Radix>, Rep> {
-        /// \brief generates a \ref fixed_point equivalent to \c r in type and value
+        /// \brief generates a \ref scaled_integer equivalent to \c r in type and value
         constexpr auto operator()(Rep const& r) const
         -> scaled_integer<Rep, Exponent, Radix>
         {

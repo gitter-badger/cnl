@@ -5,7 +5,7 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 /// \file
-/// \brief essential named definitions related to the `cnl::fixed_point` type
+/// \brief essential named definitions related to the `cnl::scaled_integer` type
 
 #if !defined(CNL_FIXED_POINT_NAMED_H)
 #define CNL_FIXED_POINT_NAMED_H 1
@@ -20,12 +20,12 @@ namespace cnl {
     ////////////////////////////////////////////////////////////////////////////////
     // cnl::make_scaled_integer<Value>
 
-    /// \brief makes a fixed_point object from a given value
+    /// \brief makes a scaled_integer object from a given value
     ///
     /// \tparam Value the type of the value that is to be made
-    /// into a \ref fixed_point value
+    /// into a \ref scaled_integer value
     ///
-    /// \param value the value from which to make the \ref fixed_point object
+    /// \param value the value from which to make the \ref scaled_integer object
     ///
     /// \note This function is deprecated after C++17
     /// in favor of class template deduction.
@@ -41,22 +41,22 @@ namespace cnl {
 
     namespace _impl {
         template<typename Number>
-        struct fixed_point_rep {
+        struct scaled_integer_rep {
             using type = Number;
         };
 
         template<typename Rep, int Exponent, int Radix>
-        struct fixed_point_rep<scaled_integer<Rep, Exponent, Radix>> : fixed_point_rep<Rep> {
+        struct scaled_integer_rep<scaled_integer<Rep, Exponent, Radix>> : scaled_integer_rep<Rep> {
         };
 
         template<typename Number>
-        constexpr Number not_fixed_point(Number const& number)
+        constexpr Number not_scaled_integer(Number const& number)
         {
             return number;
         }
 
         template<typename Rep, int Exponent, int Radix>
-        constexpr Rep not_fixed_point(scaled_integer<Rep, Exponent, Radix> const& f)
+        constexpr Rep not_scaled_integer(scaled_integer<Rep, Exponent, Radix> const& f)
         {
             return _impl::to_rep(f);
         }
@@ -102,14 +102,14 @@ namespace cnl {
             using rep_type = set_digits_t<natural_result, result_digits>;
             static constexpr int rep_exponent = -fractional_digits;
 
-            using type = scaled_integer<typename fixed_point_rep<rep_type>::type, rep_exponent>;
+            using type = scaled_integer<typename scaled_integer_rep<rep_type>::type, rep_exponent>;
         };
     }
 
-    /// \brief calculates the quotient of two \ref fixed_point values
-    /// \headerfile cnl/fixed_point.h
+    /// \brief calculates the quotient of two \ref scaled_integer values
+    /// \headerfile cnl/scaled_integer.h
     ///
-    /// \tparam Quotient the desired \ref fixed_point type of quotient;
+    /// \tparam Quotient the desired \ref scaled_integer type of quotient;
     /// by default, a value which minimizes the chances of overflow or precision loss
     /// \tparam Dividend the dividend (top number) of the division
     /// \tparam Divisor the divisor (bottom number) of the division
@@ -133,8 +133,8 @@ namespace cnl {
         using result_rep = typename result_type::rep;
         return _impl::from_rep<result_type>(
                 static_cast<result_rep>(_impl::fixed_width_scale<_impl::exponent_shift<result_type, Dividend, Divisor>::value>(
-                        static_cast<result_rep>(_impl::not_fixed_point(dividend)))
-                        /_impl::not_fixed_point(divisor)));
+                        static_cast<result_rep>(_impl::not_scaled_integer(dividend)))
+                        /_impl::not_scaled_integer(divisor)));
     }
 }
 

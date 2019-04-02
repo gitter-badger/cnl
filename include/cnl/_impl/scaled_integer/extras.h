@@ -5,9 +5,9 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 /// \file
-/// \brief supplemental definitions related to the `cnl::fixed_point` type;
-/// definitions that straddle two homes, e.g. fixed_point and cmath, traits or limits;
-/// included from cnl/fixed_point.h - do not include directly!
+/// \brief supplemental definitions related to the `cnl::scaled_integer` type;
+/// definitions that straddle two homes, e.g. scaled_integer and cmath, traits or limits;
+/// included from cnl/scaled_integer.h - do not include directly!
 
 #if !defined(CNL_FIXED_POINT_EXTRAS_H)
 #define CNL_FIXED_POINT_EXTRAS_H 1
@@ -33,7 +33,7 @@ namespace cnl {
     // cnl::abs
 
     /// \brief absolute value
-    /// \headerfile cnl/fixed_point.h
+    /// \headerfile cnl/scaled_integer.h
     ///
     /// \param x input parameter
     ///
@@ -88,8 +88,8 @@ namespace cnl {
     ////////////////////////////////////////////////////////////////////////////////
     // cnl::sqrt
 
-    /// \brief calculates the square root of a \ref fixed_point value
-    /// \headerfile cnl/fixed_point.h
+    /// \brief calculates the square root of a \ref scaled_integer value
+    /// \headerfile cnl/scaled_integer.h
     ///
     /// \param x input parameter
     ///

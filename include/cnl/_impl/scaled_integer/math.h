@@ -21,14 +21,14 @@ namespace cnl {
     namespace _impl {
         namespace fp {
 
-            template<class FixedPoint>
-            constexpr FixedPoint rounding_conversion(double d) {
-                using one_longer = scaled_integer<set_digits_t<typename FixedPoint::rep, digits<FixedPoint>::value+1>, FixedPoint::exponent-1>;
-                return from_rep<FixedPoint>(static_cast<typename FixedPoint::rep>((_impl::to_rep(one_longer{ d }) + 1) >> 1));
+            template<class ScaledInteger>
+            constexpr ScaledInteger rounding_conversion(double d) {
+                using one_longer = scaled_integer<set_digits_t<typename ScaledInteger::rep, digits<ScaledInteger>::value+1>, ScaledInteger::exponent-1>;
+                return from_rep<ScaledInteger>(static_cast<typename ScaledInteger::rep>((_impl::to_rep(one_longer{ d }) + 1) >> 1));
             }
 
-            template<class FixedPoint>
-            using unsigned_rep = typename std::make_unsigned<typename FixedPoint::rep>::type;
+            template<class ScaledInteger>
+            using unsigned_rep = typename std::make_unsigned<typename ScaledInteger::rep>::type;
 
             template<class Input>
             using make_largest_ufraction = scaled_integer<unsigned_rep<Input>, -digits<unsigned_rep<Input>>::value>;

@@ -464,17 +464,17 @@ namespace cnl {
 
     template<int LhsDigits, class LhsNarrowest, CNL_IMPL_CONSTANT_VALUE_TYPE RhsValue>
     CNL_NODISCARD constexpr auto operator<<(elastic_integer<LhsDigits, LhsNarrowest> const& lhs, constant<RhsValue>)
-    -> decltype(_impl::from_rep<elastic_integer<LhsDigits + static_cast<int>(RhsValue), LhsNarrowest>>(
-            _impl::to_rep(static_cast<elastic_integer<LhsDigits + static_cast<int>(RhsValue), LhsNarrowest>>(lhs)) << RhsValue)) {
+    -> elastic_integer<LhsDigits + static_cast<int>(RhsValue), LhsNarrowest>
+    {
         using result_type = elastic_integer<LhsDigits + static_cast<int>(RhsValue), LhsNarrowest>;
-        return _impl::from_rep<result_type>(_impl::to_rep(static_cast<result_type>(lhs)) << RhsValue);
+        return static_cast<result_type>(_impl::to_rep(static_cast<result_type>(lhs)) << RhsValue);
     }
 
     template<int LhsDigits, class LhsNarrowest, CNL_IMPL_CONSTANT_VALUE_TYPE RhsValue>
     CNL_NODISCARD constexpr auto operator>>(elastic_integer<LhsDigits, LhsNarrowest> const& lhs, constant<RhsValue>)
-    -> decltype (_impl::from_rep<elastic_integer<LhsDigits - static_cast<int>(RhsValue), LhsNarrowest>>(
+    -> decltype (elastic_integer<LhsDigits - static_cast<int>(RhsValue), LhsNarrowest>(
             _impl::to_rep(lhs) >> RhsValue)) {
-        return _impl::from_rep<elastic_integer<LhsDigits - static_cast<int>(RhsValue), LhsNarrowest>>(
+        return elastic_integer<LhsDigits - static_cast<int>(RhsValue), LhsNarrowest>(
                 _impl::to_rep(lhs) >> RhsValue);
     }
 

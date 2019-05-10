@@ -109,35 +109,70 @@ namespace cnl {
         ////////////////////////////////////////////////////////////////////////////////
         // cnl::_impl::can_be_wrapped
 
-        template<typename Rep>
+        template<class Operator, typename Rep>
         struct can_be_wrapped : std::integral_constant<bool,
                 cnl::numeric_limits<Rep>::is_specialized && !std::is_floating_point<Rep>::value> {
         };
 
-        template<typename Rep, int RepN>
-        struct can_be_wrapped<Rep[RepN]> : std::false_type {};
+        template<class Operator, typename Rep, int RepN>
+        struct can_be_wrapped<Operator, Rep[RepN]> : std::false_type {};
+
+        template<class T> struct is_bit_shift : std::false_type {};
+        template<> struct is_bit_shift<shift_left_op> : std::true_type {};
+        template<> struct is_bit_shift<shift_right_op> : std::true_type {};
+
+        template<class Operator, CNL_IMPL_CONSTANT_VALUE_TYPE Value>
+        struct can_be_wrapped<Operator, constant<Value>> {
+            static constexpr bool value = !is_bit_shift<Operator>::value;
+        };
 
         ////////////////////////////////////////////////////////////////////////////////
         // cnl::_impl::is_same_wrapper
 
         template<typename T1, typename T2>
         struct is_same_wrapper : std::integral_constant<bool,
-                std::is_same<from_rep_t<T1, int>, from_rep_t<T2, int>>::value ||
+                std::is_same<from_rep_t<T1, unsigned>, from_rep_t<T2, unsigned>>::value ||
                 std::is_same<from_value_t<T1, int>, from_value_t<T2, int>>::value> {
         };
 
         ////////////////////////////////////////////////////////////////////////////////
         // cnl::_impl::can_wrap
 
-        template<typename Wrapper, typename Rep>
+        template<class Operator, typename Wrapper, typename Rep>
         struct can_wrap
-                : std::integral_constant<bool, can_be_wrapped<Rep>::value
+                : std::integral_constant<bool, can_be_wrapped<Operator, Rep>::value
                         && can_be_wrapper<Wrapper>::value
                         && !is_same_wrapper<Wrapper, Rep>::value
                         && (depth<Rep>::value < depth<Wrapper>::value)> {};
 
         ////////////////////////////////////////////////////////////////////////////////
         // cnl::_impl::binary_operator
+
+        // constant OP number_base<>
+        template<class Operator, CNL_IMPL_CONSTANT_VALUE_TYPE Value, class Rhs>
+        struct binary_operator<
+                Operator, cnl::constant<Value>, Rhs,
+                enable_if_t<is_bit_shift<Operator>::value&&is_derived_from_number_base<Rhs>::value>> {
+            using RhsRep = to_rep_t<Rhs>;
+
+            constexpr auto operator()(cnl::constant<Value> const& lhs, Rhs const& rhs) const
+            -> decltype(from_rep<Rhs>(Operator()(lhs, to_rep(rhs))))
+            {
+                return from_rep<Rhs>(Operator()(lhs, to_rep(rhs)));
+            }
+        };
+
+        // number_base<> OP constant
+        template<class Operator, class Lhs, CNL_IMPL_CONSTANT_VALUE_TYPE Value>
+        struct binary_operator<
+                Operator, Lhs, cnl::constant<Value>,
+                enable_if_t<is_bit_shift<Operator>::value&&is_derived_from_number_base<Lhs>::value>> {
+            constexpr auto operator()(Lhs const& lhs, cnl::constant<Value> const& rhs) const
+            -> decltype(from_rep<Lhs>(Operator()(to_rep(lhs), rhs)))
+            {
+                return from_rep<Lhs>(Operator()(to_rep(lhs), rhs));
+            }
+        };
 
         // higher OP number_base<>
         template<class Operator, class Lhs, class Rhs>
@@ -167,7 +202,7 @@ namespace cnl {
         template<class Operator, class Lhs, class Rhs>
         struct binary_operator<
                 Operator, Lhs, Rhs,
-                enable_if_t<can_wrap<Rhs, Lhs>::value>> {
+                enable_if_t<can_wrap<Operator, Rhs, Lhs>::value>> {
             CNL_NODISCARD constexpr auto operator()(Lhs const& lhs, Rhs const& rhs) const
             -> decltype(Operator()(from_value<Rhs>(lhs), rhs))
             {
@@ -179,46 +214,11 @@ namespace cnl {
         template<class Operator, class Lhs, class Rhs>
         struct binary_operator<
                 Operator, Lhs, Rhs,
-                enable_if_t<can_wrap<Lhs, Rhs>::value>> {
+                enable_if_t<can_wrap<Operator, Lhs, Rhs>::value>> {
             CNL_NODISCARD constexpr auto operator()(Lhs const& lhs, Rhs const& rhs) const
             -> decltype(Operator()(lhs, from_value<Lhs>(rhs)))
             {
                 return Operator()(lhs, from_value<Lhs>(rhs));
-            }
-        };
-
-        ////////////////////////////////////////////////////////////////////////////////
-        // cnl::_impl::shift_operator
-
-#if defined(CNL_OVERLOAD_RESOLUTION_HACK)
-        template<typename Lhs, typename Rhs>
-        struct excluded_from_specialization : std::false_type {
-        };
-#endif
-
-        template<class Operator, class Lhs, class Rhs>
-        struct shift_operator<
-                Operator, Lhs, Rhs,
-                enable_if_t<is_derived_from_number_base<Lhs>::value&&!is_same_wrapper<Lhs, Rhs>::value
-#if defined(CNL_OVERLOAD_RESOLUTION_HACK)
-                &&!excluded_from_specialization<Lhs, Rhs>::value
-#endif
-        >> {
-            CNL_NODISCARD constexpr auto operator()(Lhs const& lhs, Rhs const& rhs) const
-            -> decltype(from_rep<Lhs>(Operator()(to_rep(lhs), rhs)))
-            {
-                return from_rep<Lhs>(Operator()(to_rep(lhs), rhs));
-            }
-        };
-
-        template<class Operator, class Lhs, class Rhs>
-        struct shift_operator<
-                Operator, Lhs, Rhs,
-                enable_if_t<is_derived_from_number_base<Lhs>::value&&is_same_wrapper<Lhs, Rhs>::value>> {
-            CNL_NODISCARD constexpr auto operator()(Lhs const& lhs, Rhs const& rhs) const
-            -> decltype(from_rep<Lhs>(Operator()(to_rep(lhs), to_rep(rhs))))
-            {
-                return from_rep<Lhs>(Operator()(to_rep(lhs), to_rep(rhs)));
             }
         };
 
@@ -253,7 +253,7 @@ namespace cnl {
         template<class Operator, class Lhs, class Rhs>
         struct comparison_operator<
                 Operator, Lhs, Rhs,
-                enable_if_t<can_wrap<Rhs, Lhs>::value>> {
+                enable_if_t<can_wrap<Operator, Rhs, Lhs>::value>> {
             CNL_NODISCARD constexpr auto operator()(Lhs const& lhs, Rhs const& rhs) const
             -> decltype(Operator()(from_value<Rhs>(lhs), rhs))
             {
@@ -265,7 +265,7 @@ namespace cnl {
         template<class Operator, class Lhs, class Rhs>
         struct comparison_operator<
                 Operator, Lhs, Rhs,
-                enable_if_t<can_wrap<Lhs, Rhs>::value>> {
+                enable_if_t<can_wrap<Operator, Lhs, Rhs>::value>> {
             CNL_NODISCARD constexpr auto operator()(Lhs const& lhs, Rhs const& rhs) const
             -> decltype(Operator()(lhs, from_value<Lhs>(rhs)))
             {
